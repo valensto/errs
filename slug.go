@@ -18,8 +18,8 @@ type (
 	// Duplicate represents a 409 Conflict error, indicating a duplicate resource or action.
 	Duplicate slug
 
-	// BadRequest represents a 400 Bad Request error, typically used for validation failures.
-	BadRequest slug
+	// Invalid represents a 400 Bad Request error, typically used for validation failures.
+	Invalid slug
 
 	// Forbidden represents a 403 Forbidden error, indicating lack of permission.
 	Forbidden slug
@@ -42,7 +42,7 @@ type (
 const (
 	SlugUnknown        Unknown        = "unknown"
 	SlugNotFound       NotFound       = "not-found"
-	SlugBadRequest     BadRequest     = "request-invalid"
+	SlugInvalid        Invalid        = "request-invalid"
 	SlugUnauthorized   Unauthorized   = "unauthorized"
 	SlugForbidden      Forbidden      = "forbidden"
 	SlugDuplicate      Duplicate      = "already-exists"
@@ -60,7 +60,7 @@ func (s NotFound) Error() string {
 	return string(s)
 }
 
-func (s BadRequest) Error() string {
+func (s Invalid) Error() string {
 	return string(s)
 }
 

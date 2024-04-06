@@ -94,13 +94,13 @@ func NewFromValidator(err error, translator ut.Translator) Err {
 	var invalidValidationError *validator.InvalidValidationError
 	if errors.As(err, &invalidValidationError) {
 		return Err{
-			slug:  SlugBadRequest,
+			slug:  SlugInvalid,
 			error: err,
 		}
 	}
 
 	e := Err{
-		slug:  SlugBadRequest,
+		slug:  SlugInvalid,
 		error: err,
 	}
 	for _, err := range err.(validator.ValidationErrors) {

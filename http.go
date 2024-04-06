@@ -36,24 +36,27 @@ const (
 // appropriate HTTP responses, thereby encapsulating the error handling logic
 // and promoting a cleaner and more maintainable codebase.
 func HTTPStatus(err error) int {
+	if err == nil {
+		return http.StatusOK
+	}
+
 	e := getErr(err)
-
-	errorMap := map[error]int{
-		(*NotFound)(nil):       http.StatusNotFound,
-		(*BadRequest)(nil):     http.StatusBadRequest,
-		(*Unauthorized)(nil):   http.StatusUnauthorized,
-		(*Forbidden)(nil):      http.StatusForbidden,
-		(*Duplicate)(nil):      http.StatusConflict,
-		(*NotImplemented)(nil): http.StatusNotImplemented,
+	switch {
+	case errors.Is(e.slug, SlugNotFound):
+		return http.StatusNotFound
+	case errors.Is(e.slug, SlugInvalid):
+		return http.StatusBadRequest
+	case errors.Is(e.slug, SlugUnauthorized):
+		return http.StatusUnauthorized
+	case errors.Is(e.slug, SlugForbidden):
+		return http.StatusForbidden
+	case errors.Is(e.slug, SlugDuplicate):
+		return http.StatusConflict
+	case errors.Is(e.slug, SlugNotImplemented):
+		return http.StatusNotImplemented
+	default:
+		return http.StatusInternalServerError
 	}
-
-	for errType, statusCode := range errorMap {
-		if errors.As(e.slug, &errType) {
-			return statusCode
-		}
-	}
-
-	return http.StatusInternalServerError
 }
 
 // ProblemJSON constructs a map representing a Problem Details object as specified by RFC 9457.
